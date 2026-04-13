@@ -10,6 +10,8 @@
 ## versions
 - golang: 1.25.4
 - dependencies: latest available at the moment of adding it
+- ONLY golang code allowed. 
+- Sub-agents must be experts in golang, network, platform engineering, devops practices, or SRE practices.
 
 ## dependencies
 - optimize for native go libraries
@@ -17,6 +19,10 @@
   - logs: sirupsen/logrus
   - prometheus: prometheus-client
   - cli: spf13/cobra
+
+## workspace
+- use `git worktree` for each subagent. 
+- git commit after each task. commit message must contain WHY that was implemented and which feature or fix covers. code transcripts are not important.
 
 ## code structure
 - code is modular
@@ -26,6 +32,21 @@
   - `/pkg/<module name>` contains each module's folder and their files within. all unit tests are in the same module folder with the suffix `_test` on each filename before the file extension (like: `metrics.go` `metrics_test.go`)
   - `helm-chart` contains the chart for kubernetes distribution. 
 
+## logging
+- use sirupsen/logrus for logging
+- define a logger structure that is defined once and configured once. 
+- Each pkg will have a pointer to the logger, so it can be used.
+- loglevel defaults to `INFO`. It can be lowered to `Debug` 
+- when logging strings with fields always use `.WithFields({"field1": value}).<LogLevel>("message")`
+- config is always detailed in Debug level. 
+- when a new instance of an object is created, it's parameters are logged as debug.
+- when remote endpoints are called, a logline is emitted in debug
+
+## error handling
+- All errors are logged as Error where they are generated.
+- error type comparison is always done using `errors.Is(ExpectedErrorType, err)`
+
+
 ## build
 building the project with native `go build` command
 
@@ -33,6 +54,9 @@ building the project with native `go build` command
 testing the project with native `go test` command. Prioritize running always the entire test suite. this ensures that large code changes do not break other dependencies.
 Each module has enough relevant tests and testcases to ensure a good coverage of each implemented feature.
 End-to-end tests are also required to ensure that when the code is executed as intended, it behaves as defined (metrics are exposed, http endpoints respond, error loglines are generated, network requests to mocked third parties are established). These end-to-end tests are part of a dedicated module. end-to-end test files are also suffixed with  `_test`.
+
+## local execution
+running the project in local environment with native `go run` command. 
 
 ## distribution
 ### container
@@ -57,7 +81,7 @@ The project provides an easy path to deploy this exporter in a kubernetes cluste
   - the project is built. 
   - helm chart actions are run.
   - the container is built using `buildx` and for amd64 architecture. 
-  - container is labelled as nightly. Only one nightly image is available. 
+  - container is labelled as nightly. Only one nightly image is available. All previous container images that are not labelled, or only labelled with `nightly` are deleted. 
 - On each github release creation:
   - all tests are run.
   - the project is built.
@@ -66,3 +90,7 @@ The project provides an easy path to deploy this exporter in a kubernetes cluste
   - generated container is published to ghcr.io. 
   - container is labeled as `latest` and with the generated label from the release.
 
+## project management
+- keep the implementation plan in `TODO.md`. if it does not exist, create it with an initial implementation plan. 
+- always re-read the TODO.md. it can be externally modified between reads.
+- always keep the plan up-to-date. If a mandated or self-identified task is not there, add it to the plan.

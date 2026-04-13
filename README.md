@@ -135,7 +135,7 @@ ping: sendto: No route to host
 ```
 
 ## configuration
-this exporter supports multiple monitored destinations.. each is configured in the specified `config.yaml` file with the following syntax:
+this exporter supports multiple monitored destinations. each is configured in the specified `config.yaml` file with the following syntax:
 ```yaml
 - target: 192.168.1.1
   interval: 0.1s
@@ -147,7 +147,7 @@ this exporter supports multiple monitored destinations.. each is configured in t
 
 All values must be specified. Incomplete targets are ignored and logged as warnings. 
 
-`timeout` can be `infinite` meaning the packet will be waited forever. 
+`timeout` can be `infinite` meaning the packet will be waited forever. Infinite is internally represented as "0: no deadline on the socket read"
 
 ## CLI Arguments
 | argument                             | default                      | dscription                                                                        | 
@@ -168,8 +168,10 @@ It exposes the latest processed ping value at the time of scrape.
 | metric name           | labels                 | description                                                    | 
 |-----------------------|------------------------|----------------------------------------------------------------|
 | icmp_duration_seconds | `target`, `identifier` | latest ping for each labelled target at the moment of scraping |
-| icmp_interval_seconds | `target`, `identifier`               | configured ICMP interval defined per target, in seconds        | 
-| icmp_timeout_seconds  | `target`, `identifier`               | configured ICMP timeout defined per target, in seconds         | 
+| icmp_interval_seconds | `target`, `identifier` | configured ICMP interval defined per target, in seconds        | 
+| icmp_timeout_seconds  | `target`, `identifier` | configured ICMP timeout defined per target, in seconds         | 
+| icmp_average_duration_seconds | `target`, `identifier` | average time since last scrape                                 | 
+
 
 ### histogram metrics
 | metric name | labels | description | 
@@ -181,6 +183,9 @@ It exposes the latest processed ping value at the time of scrape.
 | icmp_sent_sum | `target`, `identifier` | the total sum of all observed values | 
 | icmp_received_sum | `target`, `identifier` | the total sum of all observed values | 
 
+Buckets exposed are: 0.0001, 0.001, 0.005, 0.010, 0.025, 0.050, 0.100, 0.200, 1.0, 5.0 seconds.
+
+Packet loss is represented as `(icmp_received_count / icmp_sent_count)`.
 
 # Technical details
 The behaviour is coded after the Mac/BSD ping man page sections:
