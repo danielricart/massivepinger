@@ -1,0 +1,29 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/example/massivepinger
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 9123
+
+# List of ping targets rendered into the ConfigMap as config.yaml.
+# Example:
+# config:
+#   - target: 8.8.8.8
+#     interval: 5s
+#     timeout: 1s
+#   - target: 1.1.1.1
+#     interval: 10s
+#     timeout: infinite
+config: []
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
