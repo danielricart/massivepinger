@@ -1,12 +1,24 @@
 package metrics
 
-import "github.com/prometheus/client_golang/prometheus"
+import (
+	"sync"
+
+	"github.com/prometheus/client_golang/prometheus"
+)
+
+// emaAlpha controls how fast the exponential moving average reacts to new RTT
+// samples. 0.5 gives equal weight to the latest observation and the history,
+// producing a fast-reacting smoother.
+const emaAlpha = 0.5
 
 // Metrics holds all Prometheus metrics for massivepinger ICMP probing.
 // Each instance is scoped to a single identifier (e.g. the exporter instance name)
 // and uses per-target label values supplied at observation time.
 type Metrics struct {
 	identifier string
+
+	emaMu     sync.Mutex
+	emaValues map[string]float64
 
 	icmpDurationSeconds        *prometheus.GaugeVec
 	icmpIntervalSeconds        *prometheus.GaugeVec
@@ -25,6 +37,7 @@ func New(identifier string, reg prometheus.Registerer) *Metrics {
 
 	m := &Metrics{
 		identifier: identifier,
+		emaValues:  make(map[string]float64),
 
 		icmpDurationSeconds: prometheus.NewGaugeVec(prometheus.GaugeOpts{
 			Name: "icmp_duration_seconds",
@@ -87,6 +100,10 @@ func (m *Metrics) InitTarget(target string, interval, timeout float64) {
 	m.icmpTimeoutSeconds.With(l).Set(timeout)
 	m.icmpDurationSeconds.With(l).Set(0)
 	m.icmpAverageDurationSeconds.With(l).Set(0)
+
+	m.emaMu.Lock()
+	m.emaValues[target] = 0
+	m.emaMu.Unlock()
 }
 
 // ObserveSent records a sent ICMP probe in the icmp_sent histogram.
@@ -95,11 +112,18 @@ func (m *Metrics) ObserveSent(target string, rtt float64) {
 }
 
 // ObserveReceived records a received ICMP probe in the icmp_received histogram
-// and updates the average duration gauge with the latest RTT value.
+// and updates the EMA gauge: avg = emaAlpha*rtt + (1-emaAlpha)*prev.
 func (m *Metrics) ObserveReceived(target string, rtt float64) {
 	l := m.labels(target)
 	m.icmpReceived.With(l).Observe(rtt)
-	m.icmpAverageDurationSeconds.With(l).Set(rtt)
+
+	m.emaMu.Lock()
+	prev := m.emaValues[target]
+	ema := emaAlpha*rtt + (1-emaAlpha)*prev
+	m.emaValues[target] = ema
+	m.emaMu.Unlock()
+
+	m.icmpAverageDurationSeconds.With(l).Set(ema)
 }
 
 // SetLatest updates the icmp_duration_seconds gauge to the most recent RTT.

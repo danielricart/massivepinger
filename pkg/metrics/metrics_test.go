@@ -144,18 +144,30 @@ func TestObserveReceived(t *testing.T) {
 	}
 }
 
-// TestObserveReceived_UpdatesAverage verifies that ObserveReceived also sets
-// icmp_average_duration_seconds to the observed RTT.
+// TestObserveReceived_UpdatesAverage verifies EMA behaviour:
+//   - first observation from zero → emaAlpha * rtt
+//   - repeated identical observations converge to within 1% of rtt
 func TestObserveReceived_UpdatesAverage(t *testing.T) {
 	m, _ := newTestMetrics(t)
 	m.InitTarget(testTarget, 5.0, 1.0)
 
 	const rtt = 0.042
-	m.ObserveReceived(testTarget, rtt)
 
+	// First observation: EMA starts at 0, so result = emaAlpha * rtt.
+	m.ObserveReceived(testTarget, rtt)
+	want := emaAlpha * rtt
 	got := testutil.ToFloat64(m.icmpAverageDurationSeconds.With(m.labels(testTarget)))
-	if got != rtt {
-		t.Errorf("icmp_average_duration_seconds: got %v, want %v", got, rtt)
+	if got != want {
+		t.Errorf("after first observation: icmp_average_duration_seconds = %v, want %v", got, want)
+	}
+
+	// Drive convergence: 50 identical samples bring EMA within 1% of rtt.
+	for i := 0; i < 50; i++ {
+		m.ObserveReceived(testTarget, rtt)
+	}
+	converged := testutil.ToFloat64(m.icmpAverageDurationSeconds.With(m.labels(testTarget)))
+	if converged < rtt*0.99 || converged > rtt*1.01 {
+		t.Errorf("after convergence: icmp_average_duration_seconds = %v, want ~%v (±1%%)", converged, rtt)
 	}
 }
 
