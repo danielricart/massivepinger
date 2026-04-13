@@ -9,7 +9,7 @@ RUN go mod download
 FROM golang:1.25 AS build
 
 WORKDIR /build
-COPY --from=deps /root/go/pkg/mod /root/go/pkg/mod
+COPY --from=deps /go/pkg/mod /go/pkg/mod
 COPY . .
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /massivepinger .
 
