@@ -49,6 +49,22 @@ serviceMonitor:
   #     regex: "go_.*"
   #     action: drop
 
+grafana:
+  dashboard:
+    # Enable to create a Grafana dashboard resource.
+    enabled: false
+    # "sidecar"  - ConfigMap labeled for the Grafana sidecar (kube-prometheus-stack default).
+    #              Requires grafana.sidecar.dashboards.enabled=true in the Grafana helm chart.
+    # "operator" - dashboard.grafana.app/v2 Dashboard CR (requires Grafana Operator).
+    type: sidecar
+    # namespace: ""  # defaults to release namespace
+    # For sidecar type: label and value the Grafana sidecar watches for dashboard discovery.
+    label: grafana_dashboard
+    labelValue: "1"
+    # Additional labels and annotations added to the created resource.
+    labels: {}
+    annotations: {}
+
 resources: {}
 #   requests:
 #     memory: "8Mi"
