@@ -1,0 +1,42 @@
+{{- if .Values.grafana.dashboard.enabled }}
+{{- if eq .Values.grafana.dashboard.type "sidecar" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "massivepinger.fullname" . }}-dashboard
+  namespace: {{ .Values.grafana.dashboard.namespace | default .Release.Namespace }}
+  labels:
+    {{ .Values.grafana.dashboard.label }}: {{ .Values.grafana.dashboard.labelValue | quote }}
+    {{- include "massivepinger.labels" . | nindent 4 }}
+    {{- with .Values.grafana.dashboard.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.grafana.dashboard.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  massivepinger.json: |-
+    {{- .Files.Get "dashboards/massivepinger.json" | nindent 4 }}
+{{- else if eq .Values.grafana.dashboard.type "operator" }}
+{{- $crd := .Files.Get "dashboards/massivepinger-crd.yaml" | fromYaml }}
+apiVersion: dashboard.grafana.app/v2
+kind: Dashboard
+metadata:
+  name: {{ include "massivepinger.fullname" . }}-dashboard
+  namespace: {{ .Values.grafana.dashboard.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "massivepinger.labels" . | nindent 4 }}
+    {{- with .Values.grafana.dashboard.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.grafana.dashboard.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- $crd.spec | toYaml | nindent 2 }}
+{{- else }}
+  {{- fail (printf "grafana.dashboard.type must be 'sidecar' or 'operator', got: %s" .Values.grafana.dashboard.type) }}
+{{- end }}
+{{- end }}

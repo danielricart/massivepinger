@@ -187,6 +187,13 @@ Buckets exposed are: 0.0001, 0.001, 0.005, 0.010, 0.025, 0.050, 0.100, 0.200, 1.
 
 Packet loss is represented as `(icmp_received_count / icmp_sent_count)`.
 
+### Dashboards
+A sample grafana dashboard is available at `helm-chart/dashboards` in two versions:
+- plain JSON for importing into grafana
+- Grafana Dashboard CR object to import directly into a Kubernetes cluster running Grafana Operator. 
+
+![img.png](screenshots/img.png)
+
 # Technical details
 The behaviour is coded after the Mac/BSD ping man page sections:
 
