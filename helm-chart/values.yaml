@@ -1,7 +1,10 @@
 replicaCount: 1
 
+# Identifier passed to --identifier. Useful to expose multiple observation sites.
+identifier: massivepinger
+
 image:
-  repository: ghcr.io/example/massivepinger
+  repository: ghcr.io/danielricart/massivepinger
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -30,8 +33,29 @@ serviceMonitor:
   # Additional labels to add to the ServiceMonitor (e.g. to match a Prometheus
   # instance's serviceMonitorSelector).
   labels: {}
+  # Relabelings applied to the scrape target before ingestion.
+  # Useful for adding static labels or renaming target labels.
+  # relabelings:
+  #   - targetLabel: cluster
+  #     replacement: my-cluster
+  #   - sourceLabels: [__meta_kubernetes_pod_node_name]
+  #     targetLabel: node
+  # Relabelings applied to each metric series after scraping.
+  # Useful for adding, renaming, or dropping labels on individual metrics.
+  # metricRelabelings:
+  #   - targetLabel: env
+  #     replacement: production
+  #   - sourceLabels: [__name__]
+  #     regex: "go_.*"
+  #     action: drop
 
 resources: {}
+#   requests:
+#     memory: "8Mi"
+#     cpu: "25m"
+#   limits:
+#     memory: "16Mi"
+#     cpu: "50m"
 
 nodeSelector: {}
 
