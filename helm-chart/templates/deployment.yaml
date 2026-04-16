@@ -23,6 +23,10 @@ spec:
             - "/config/config.yaml"
             - "--port"
             - "{{ .Values.service.port }}"
+            {{- with .Values.identifier }}
+            - "--identifier"
+            - "{{ . }}"
+            {{- end }}
           ports:
             - name: metrics
               containerPort: 9123
