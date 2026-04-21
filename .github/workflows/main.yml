@@ -72,10 +72,3 @@ jobs:
           min-versions-to-keep: 0
           delete-only-untagged-versions: true
 
-      - name: Delete old nightly container image versions
-        uses: actions/delete-package-versions@v5
-        with:
-          package-name: massivepinger
-          package-type: container
-          min-versions-to-keep: 1
-          ignore-versions: "^(latest|v.*)$"
