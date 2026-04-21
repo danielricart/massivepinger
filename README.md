@@ -1,6 +1,6 @@
 Continuous Ping Exporter
 ---
-This exporter continously send ICMP packets to specified targets and collect metrics about it. 
+This prometheus exporter continously send ICMP packets to specified targets and collect metrics about it. 
 
 when diagnosing network trasient erorrs and sporadic sudden packet drops, low-frequency ICMPs easily hide those issues as one single packet lost, or small latency spike. 
 
