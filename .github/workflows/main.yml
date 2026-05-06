@@ -69,7 +69,7 @@ jobs:
         with:
           package-name: massivepinger
           package-type: container
-          min-versions-to-keep: 0
+          min-versions-to-keep: 10
           delete-only-untagged-versions: true
           ignore-versions: "^(latest|v.+)$"
 
