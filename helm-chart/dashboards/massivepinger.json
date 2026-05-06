@@ -1,47 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DATASOURCE_SELECTION",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "13.1.0-24251769778"
-    },
-    {
-      "type": "panel",
-      "id": "heatmap",
-      "name": "Heatmap",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -62,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "links": [],
+  "liveNow": false,
   "panels": [
     {
       "datasource": {
@@ -75,7 +32,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -86,8 +42,7 @@
             ]
           },
           "unit": "reqps"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 4,
@@ -113,7 +68,7 @@
         "textMode": "value_and_name",
         "wideLayout": true
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -143,7 +98,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -154,8 +108,7 @@
             ]
           },
           "unit": "reqps"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 4,
@@ -181,7 +134,7 @@
         "textMode": "value_and_name",
         "wideLayout": true
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -211,7 +164,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -230,8 +182,7 @@
             ]
           },
           "unit": "s"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 4,
@@ -257,7 +208,7 @@
         "textMode": "value_and_name",
         "wideLayout": true
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -287,7 +238,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [],
           "max": 100,
           "min": 0,
           "thresholds": {
@@ -308,8 +258,7 @@
             ]
           },
           "unit": "percent"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 4,
@@ -335,7 +284,7 @@
         "textMode": "value_and_name",
         "wideLayout": true
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -366,7 +315,6 @@
             "fixedColor": "orange",
             "mode": "fixed"
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -381,8 +329,7 @@
             ]
           },
           "unit": "s"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 4,
@@ -408,7 +355,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -440,7 +387,6 @@
             "fixedColor": "orange",
             "mode": "fixed"
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -455,8 +401,7 @@
             ]
           },
           "unit": "s"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 4,
@@ -482,7 +427,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -510,13 +455,16 @@
         "x": 0,
         "y": 4
       },
-      "id": 10,
-      "panels": [],
+      "id": 16,
       "repeat": "target",
       "title": "$target",
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DATASOURCE_SELECTION}"
+      },
       "description": "P50/P95/P99 RTT from histogram buckets. Shows tail latency invisible in averages.",
       "fieldConfig": {
         "defaults": {
@@ -557,7 +505,6 @@
               "mode": "off"
             }
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -648,7 +595,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -738,7 +685,6 @@
               "mode": "off"
             }
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -753,8 +699,7 @@
             ]
           },
           "unit": "s"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 8,
@@ -780,7 +725,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -813,6 +758,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DATASOURCE_SELECTION}"
+      },
       "description": "Absolute packet loss rate per second (sent - received). Any value above 0 means dropped packets.",
       "fieldConfig": {
         "defaults": {
@@ -854,7 +803,6 @@
               "mode": "off"
             }
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -869,8 +817,7 @@
             ]
           },
           "unit": "reqps"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 8,
@@ -899,7 +846,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -963,7 +910,6 @@
               "mode": "line+area"
             }
           },
-          "mappings": [],
           "max": 100,
           "min": 0,
           "thresholds": {
@@ -984,8 +930,7 @@
             ]
           },
           "unit": "percent"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 8,
@@ -1011,7 +956,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1049,8 +994,7 @@
             }
           },
           "unit": "short"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 12,
@@ -1098,7 +1042,7 @@
           "unit": "s"
         }
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1138,8 +1082,7 @@
               "type": "linear"
             }
           }
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 12,
@@ -1188,7 +1131,7 @@
           "unit": "s"
         }
       },
-      "pluginVersion": "13.1.0-24251769778",
+      "pluginVersion": "13.0.1",
       "targets": [
         {
           "app": "grafana-assistant-app",
@@ -1210,6 +1153,10 @@
       "type": "heatmap"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DATASOURCE_SELECTION}"
+      },
       "description": "Actual probe interval (1/sent rate) vs configured interval. Divergence means the prober is falling behind — saturation signal.",
       "fieldConfig": {
         "defaults": {
@@ -1250,7 +1197,6 @@
               "mode": "off"
             }
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1265,8 +1211,7 @@
             ]
           },
           "unit": "s"
-        },
-        "overrides": []
+        }
       },
       "gridPos": {
         "h": 8,
@@ -1329,17 +1274,25 @@
     }
   ],
   "preload": false,
+  "refresh": "",
   "schemaVersion": 42,
-  "tags": [],
   "templating": {
     "list": [
       {
         "allowCustomValue": true,
-        "current": {},
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${DATASOURCE_SELECTION}"
         },
+        "hide": 0,
         "includeAll": true,
         "label": "Target",
         "multi": true,
@@ -1355,16 +1308,25 @@
         "refresh": 2,
         "regex": "",
         "regexApplyTo": "value",
+        "skipUrlSync": false,
         "sort": 1,
         "type": "query"
       },
       {
         "allowCustomValue": true,
-        "current": {},
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": {
           "type": "prometheus",
           "uid": "${DATASOURCE_SELECTION}"
         },
+        "hide": 0,
         "includeAll": true,
         "label": "Identifier",
         "multi": true,
@@ -1379,19 +1341,52 @@
         },
         "refresh": 1,
         "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
         "sort": 1,
         "type": "query"
+      },
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "Prometheus",
+          "value": "prometheus"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "DATASOURCE_SELECTION",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
       }
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-5m",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
   "timezone": "browser",
   "title": "ICMP Sent - Histogram Over Time",
-  "uid": "adhsc9w",
-  "version": 11,
-  "weekStart": ""
+  "version": 2,
+  "uid": "adbsvk5",
+  "id": 1038178266238976
 }
